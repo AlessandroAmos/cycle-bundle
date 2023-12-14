@@ -49,9 +49,9 @@ class XmlFileLoader extends FileLoader
         $this->inflector = $inflector;
     }
 
-    public function load(mixed $file, string $type = null): GeneratorCollection
+    public function load(mixed $resource, string $type = null): GeneratorCollection
     {
-        $path = $this->locator->locate($file);
+        $path = $this->locator->locate($resource);
 
         $xml = $this->loadFile($path);
 
@@ -64,13 +64,13 @@ class XmlFileLoader extends FileLoader
                 continue;
             }
 
-            $this->parseNode($collection, $node, $path, $file);
+            $this->parseNode($collection, $node, $path, $resource);
         }
 
         return $collection;
     }
 
-    protected function parseNode(GeneratorCollection $collection, DOMElement $node, string $path, string $file)
+    protected function parseNode(GeneratorCollection $collection, DOMElement $node, string $path, string $file): void
     {
         if (self::NAMESPACE_URI !== $node->namespaceURI) {
             return;

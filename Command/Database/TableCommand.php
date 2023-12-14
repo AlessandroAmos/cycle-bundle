@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Alms\Bundle\CycleBundle\Command\Database;
 
 use Cycle\Database\Database;
+use Cycle\Database\DatabaseInterface;
 use Cycle\Database\DatabaseManager;
 use Cycle\Database\Driver\DriverInterface;
 use Cycle\Database\Exception\DBALException;
@@ -47,7 +48,7 @@ final class TableCommand extends Command
         $this->dbal = $dbal;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument('table', InputArgument::REQUIRED, 'Table name')
             ->addOption('database', 'db', InputOption::VALUE_OPTIONAL, 'Source database', null);
@@ -77,7 +78,7 @@ final class TableCommand extends Command
         $this->describeColumns($io, $schema);
 
         if (!empty($indexes = $schema->getIndexes())) {
-            $this->describeIndexes($io, $database, $indexes);
+            $this->describeIndexes($input, $io, $database, $indexes);
         }
 
         if (!empty($foreignKeys = $schema->getForeignKeys())) {
@@ -125,12 +126,12 @@ final class TableCommand extends Command
         $columnsTable->render();
     }
 
-    protected function describeIndexes(SymfonyStyle $io, Database $database, array $indexes): void
+    protected function describeIndexes(InputInterface $input, SymfonyStyle $io, DatabaseInterface $database, array $indexes): void
     {
         $io->writeln(sprintf(
             "\n<fg=cyan>Indexes of </fg=cyan><comment>%s.%s</comment>:\n",
             $database->getName(),
-            $this->argument('table')
+            $input->getArgument('table')
         ));
 
         $indexesTable = $io->createTable();
@@ -148,7 +149,7 @@ final class TableCommand extends Command
         $indexesTable->render();
     }
 
-    protected function describeForeignKeys(InputInterface $input, SymfonyStyle $io, Database $database, array $foreignKeys): void
+    protected function describeForeignKeys(InputInterface $input, SymfonyStyle $io, DatabaseInterface $database, array $foreignKeys): void
     {
         $io->writeln(sprintf(
             "\n<fg=cyan>Foreign Keys of </fg=cyan><comment>%s.%s</comment>:\n",

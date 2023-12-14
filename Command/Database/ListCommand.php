@@ -15,6 +15,7 @@ namespace Alms\Bundle\CycleBundle\Command\Database;
 
 use Cycle\Database\Config\DatabaseConfig;
 use Cycle\Database\Database;
+use Cycle\Database\DatabaseInterface;
 use Cycle\Database\DatabaseManager;
 use Cycle\Database\Driver\Driver;
 use Exception;
@@ -44,7 +45,7 @@ final class ListCommand extends Command
         $this->dbal = $dbal;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument('db', InputArgument::OPTIONAL, 'Database name');
     }
@@ -132,7 +133,7 @@ final class ListCommand extends Command
      * @param array $header
      * @param Database $database
      */
-    private function renderTables(Table $grid, array $header, Database $database): void
+    private function renderTables(Table $grid, array $header, DatabaseInterface $database): void
     {
         foreach ($database->getTables() as $table) {
             $grid->addRow(

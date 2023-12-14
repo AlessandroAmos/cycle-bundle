@@ -21,7 +21,7 @@ use ReflectionClass;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Config\Resource\FileResource;
 use TypeError;
-use function Alms\Bundle\CycleBundle\ORM\Schema\Loader\get_debug_type;
+use function get_debug_type;
 use function is_callable;
 use function is_object;
 use function is_string;
@@ -67,7 +67,7 @@ abstract class ObjectLoader extends Loader
         return $routeCollection;
     }
 
-    private function addClassResource(ReflectionClass $class, GeneratorCollection $collection)
+    private function addClassResource(ReflectionClass $class, GeneratorCollection $collection): void
     {
         do {
             if (is_file($class->getFileName())) {

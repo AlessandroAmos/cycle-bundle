@@ -22,9 +22,9 @@ class ClosureLoader extends Loader
     /**
      * Loads a Closure.
      */
-    public function load(mixed $closure, string $type = null): GeneratorCollection
+    public function load(mixed $resource, string $type = null): GeneratorCollection
     {
-        return $closure($this, $this->env);
+        return $resource($this, $this->env);
     }
 
     public function supports(mixed $resource, string $type = null): bool

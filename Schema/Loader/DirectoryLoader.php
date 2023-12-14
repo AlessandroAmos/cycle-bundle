@@ -19,9 +19,9 @@ use Symfony\Component\Config\Resource\DirectoryResource;
 
 class DirectoryLoader extends FileLoader
 {
-    public function load(mixed $file, string $type = null): GeneratorCollection
+    public function load(mixed $resource, string $type = null): GeneratorCollection
     {
-        $path = $this->locator->locate($file);
+        $path = $this->locator->locate($resource);
 
         $collection = new GeneratorCollection();
         $collection->addResource(new DirectoryResource($path));

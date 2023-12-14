@@ -28,9 +28,9 @@ class AnnotationLoader extends FileLoader
     /**
      * {@inheritdoc}
      */
-    public function load(mixed $file, string $type = null): GeneratorCollection
+    public function load(mixed $resource, string $type = null): GeneratorCollection
     {
-        $path = $this->locator->locate($file);
+        $path = $this->locator->locate($resource);
         $finder = (new Finder())->files()->in([$path]);
         $classLocator = new ClassLocator($finder);
         $generators = new GeneratorCollection();

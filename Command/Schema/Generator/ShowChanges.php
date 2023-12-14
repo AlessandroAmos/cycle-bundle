@@ -15,6 +15,7 @@ namespace Alms\Bundle\CycleBundle\Command\Schema\Generator;
 
 use Cycle\Database\Schema\AbstractTable;
 use Cycle\Database\Schema\Comparator;
+use Cycle\Database\Schema\ComparatorInterface;
 use Cycle\Schema\GeneratorInterface;
 use Cycle\Schema\Registry;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -101,7 +102,7 @@ final class ShowChanges implements GeneratorInterface
         $this->describeFKs($cmp);
     }
 
-    protected function describeColumns(Comparator $cmp): void
+    protected function describeColumns(ComparatorInterface $cmp): void
     {
         foreach ($cmp->addedColumns() as $column) {
             $this->output->writeln("    - add column <fg=yellow>{$column->getName()}</fg=yellow>");
@@ -117,7 +118,7 @@ final class ShowChanges implements GeneratorInterface
         }
     }
 
-    protected function describeIndexes(Comparator $cmp): void
+    protected function describeIndexes(ComparatorInterface $cmp): void
     {
         foreach ($cmp->addedIndexes() as $index) {
             $index = implode(', ', $index->getColumns());
@@ -136,7 +137,7 @@ final class ShowChanges implements GeneratorInterface
         }
     }
 
-    protected function describeFKs(Comparator $cmp): void
+    protected function describeFKs(ComparatorInterface $cmp): void
     {
         foreach ($cmp->addedForeignKeys() as $fk) {
             $fkColumns = implode(', ', $fk->getColumns());
