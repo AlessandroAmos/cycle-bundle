@@ -43,7 +43,7 @@ class ApplyRelationDefaults implements GeneratorInterface
         return $registry;
     }
 
-    private function applyRelationDefaults(Registry $registry, string $type, array $global)
+    private function applyRelationDefaults(Registry $registry, string $type, array $global): void
     {
         $defaults = array_merge($global, $this->defaults[$type] ?? []);
         if (empty($defaults)) {
@@ -64,7 +64,7 @@ class ApplyRelationDefaults implements GeneratorInterface
         return $converted;
     }
 
-    private function modifyRelationDefaults(Entity $entity, string $type, array $defaults)
+    private function modifyRelationDefaults(Entity $entity, string $type, array $defaults): void
     {
         foreach ($entity->getRelations() as $relation) {
             if (strcasecmp($type, $relation->getType()) !== 0) {

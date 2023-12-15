@@ -5,6 +5,8 @@ namespace Alms\Bundle\CycleBundle\Security;
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\RepositoryInterface;
 use Cycle\ORM\SchemaInterface;
+use ReflectionException;
+use ReflectionObject;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -38,7 +40,7 @@ class CycleUserProvider implements UserProviderInterface
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function refreshUser(UserInterface $user): UserInterface
     {
@@ -56,7 +58,7 @@ class CycleUserProvider implements UserProviderInterface
 
             $primaryKeys = $this->orm->getSchema()->define($this->class, SchemaInterface::PRIMARY_KEY);
 
-            $ref = new \ReflectionObject($user);
+            $ref = new ReflectionObject($user);
 
             $condition = [];
 

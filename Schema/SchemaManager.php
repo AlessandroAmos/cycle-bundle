@@ -75,7 +75,7 @@ final class SchemaManager implements ServiceSubscriberInterface, CacheWarmerInte
      *
      * @throws InvalidArgumentException When unsupported option is provided
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): void
     {
         $this->options = [
             'cache_dir' => null,
@@ -103,7 +103,7 @@ final class SchemaManager implements ServiceSubscriberInterface, CacheWarmerInte
     /**
      * {@inheritdoc}
      */
-    public function clear(string $cacheDir)
+    public function clear(string $cacheDir): void
     {
         @unlink($this->options['cache_dir'] . '/cycle_schemas.php');
     }
@@ -216,7 +216,7 @@ final class SchemaManager implements ServiceSubscriberInterface, CacheWarmerInte
     /**
      * {@inheritdoc}
      */
-    public function warmUp(string $cacheDir): array
+    public function warmUp(string $cacheDir, string $buildDir = null): array
     {
         $this->schema = null;
         $this->getSchema();

@@ -51,7 +51,7 @@ final class TableCommand extends Command
     protected function configure(): void
     {
         $this->addArgument('table', InputArgument::REQUIRED, 'Table name')
-            ->addOption('database', 'db', InputOption::VALUE_OPTIONAL, 'Source database', null);
+            ->addOption('database', 'db', InputOption::VALUE_OPTIONAL, 'Source database');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -107,7 +107,7 @@ final class TableCommand extends Command
             $name = $column->getName();
 
             if (in_array($column->getName(), $schema->getPrimaryKeys(), true)) {
-                $name = "<fg=magenta>{$name}</fg=magenta>";
+                $name = "<fg=magenta>$name</fg=magenta>";
             }
 
             $defaultValue = $this->describeDefaultValue($column, $schema->getDriver());
@@ -191,7 +191,7 @@ final class TableCommand extends Command
         if ($defaultValue instanceof FragmentInterface) {
             $value = $driver->getQueryCompiler()->compile(new QueryParameters(), '', $defaultValue);
 
-            return "<info>{$value}</info>";
+            return "<info>$value</info>";
         }
 
         if ($defaultValue instanceof DateTimeInterface) {
@@ -223,7 +223,7 @@ final class TableCommand extends Command
         $abstractType = $column->getAbstractType();
 
         if (in_array($abstractType, ['primary', 'bigPrimary'])) {
-            $abstractType = "<fg=magenta>{$abstractType}</fg=magenta>";
+            $abstractType = "<fg=magenta>$abstractType</fg=magenta>";
         }
 
         return $abstractType;

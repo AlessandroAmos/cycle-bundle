@@ -151,8 +151,6 @@ class GeneratorCollection implements IteratorAggregate, Countable, ArrayAccess
     }
 
     /**
-     * 返回加载的资源
-     *
      * @return ResourceInterface[] An array of resources
      */
     public function getResources(): array
@@ -161,10 +159,9 @@ class GeneratorCollection implements IteratorAggregate, Countable, ArrayAccess
     }
 
     /**
-     * 添加GeneratorInterface集合
      * @param GeneratorCollection $collection
      */
-    public function addCollection(GeneratorCollection $collection)
+    public function addCollection(GeneratorCollection $collection): void
     {
         foreach ($collection->sorted() as $priority => $sorted) {
             $this->addAll($sorted, $priority);
@@ -176,11 +173,9 @@ class GeneratorCollection implements IteratorAggregate, Countable, ArrayAccess
     }
 
     /**
-     * 添加资源为当前GeneratorInterface集合
-     *
      * @param ResourceInterface $resource
      */
-    public function addResource(ResourceInterface $resource)
+    public function addResource(ResourceInterface $resource): void
     {
         $key = (string)$resource;
 

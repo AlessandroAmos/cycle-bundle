@@ -35,16 +35,16 @@ class CycleExtension extends Extension
         $this->configureMigration($container, $config['migration']);
     }
 
-    private function configureDbal(ContainerBuilder $container, array $configs)
+    private function configureDbal(ContainerBuilder $container, array $configs): void
     {
         foreach ($configs['connections'] as $name => $config) {
             $connection = new ChildDefinition('cycle.dbal.connection_config');
             $connection->addArgument($config);
-            $container->setDefinition("cycle.dbal.connection_config.{$name}", $connection);
+            $container->setDefinition("cycle.dbal.connection_config.$name", $connection);
 
             $driver = new ChildDefinition('cycle.dbal.driver_config');
             $driver->addArgument($config)->addTag('cycle.dbal.driver_config', ['name' => $name]);
-            $container->setDefinition("cycle.dbal.driver_config.{$name}", $driver);
+            $container->setDefinition("cycle.dbal.driver_config.$name", $driver);
         }
         $container->addAliases([
             "cycle.dbal.default_connection_config" => "cycle.dbal.connection_config.{$configs['default_connection']}",
@@ -54,7 +54,7 @@ class CycleExtension extends Extension
         $container->findDefinition('cycle.dbal.database_config')->setArgument('$config', $configs);
     }
 
-    private function configureOrm(ContainerBuilder $container, array $configs)
+    private function configureOrm(ContainerBuilder $container, array $configs): void
     {
         $container->setParameter('cycle.schema.cache_dir', $configs['cache_dir']);
         // generator
@@ -87,7 +87,7 @@ class CycleExtension extends Extension
         $container->setParameter('cycle.schema.resources', $configs['schemas']);
     }
 
-    private function configureMigration(ContainerBuilder $container, array $configs)
+    private function configureMigration(ContainerBuilder $container, array $configs): void
     {
         $container->setParameter('cycle.migration.config', $configs);
     }

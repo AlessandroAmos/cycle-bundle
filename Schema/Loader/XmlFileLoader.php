@@ -202,7 +202,7 @@ class XmlFileLoader extends FileLoader
         }
     }
 
-    protected function parseBehaviors(Entity $entity, DOMElement $node, string $path)
+    protected function parseBehaviors(Entity $entity, DOMElement $node, string $path): void
     {
         foreach ($node->childNodes as $child) {
             if (!$child instanceof DOMElement) {
@@ -304,7 +304,7 @@ class XmlFileLoader extends FileLoader
         return $field;
     }
 
-    protected function parseRelation(Entity $entity, DOMElement $node, string $path)
+    protected function parseRelation(Entity $entity, DOMElement $node, string $path): void
     {
         $relation = new Relation();
         $relation->setTarget($node->getAttribute('target'));
@@ -387,7 +387,7 @@ class XmlFileLoader extends FileLoader
         return $orderBy;
     }
 
-    protected function parseImport(GeneratorCollection $collection, DOMElement $node, string $path, string $file)
+    protected function parseImport(GeneratorCollection $collection, DOMElement $node, string $path, string $file): void
     {
         /** @var DOMElement $resourceElement */
         if (!($resource = $node->getAttribute('resource') ?: null) && $resourceElement = $node->getElementsByTagName('resource')[0] ?? null) {

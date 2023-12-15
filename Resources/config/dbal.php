@@ -28,14 +28,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('cycle.dbal.config_factory'),
             'createConnectionConfig',
         ])
-        ->abstract(true);
+        ->abstract();
 
     $services->set('cycle.dbal.driver_config', DriverConfig::class)
         ->factory([
             service('cycle.dbal.config_factory'),
             'createDriverConfig',
         ])
-        ->abstract(true);
+        ->abstract();
 
     $services->set('cycle.dbal.database_config', DatabaseConfig::class)
         ->factory([
