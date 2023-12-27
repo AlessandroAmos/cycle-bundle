@@ -115,7 +115,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set('cycle.schema.registry_defaults', \Cycle\Schema\Defaults::class)
         ->arg('$defaults', [
-            SchemaInterface::MAPPER => \App\Entity\Mapper::class,
+            SchemaInterface::MAPPER => \Alms\Bundle\CycleBundle\Mapper\Mapper::class,
             SchemaInterface::REPOSITORY => Repository::class,
             SchemaInterface::SOURCE => Source::class,
             SchemaInterface::SCOPE => null,
@@ -178,7 +178,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->alias(SchemaToArrayConverter::class, 'cycle.schema.schema_to_array_converter');
 
-    $services->set('cycle.orm.mapper.proxy_util', \App\ProxyUtil::class)
+    $services->set('cycle.orm.mapper.proxy_util', \Alms\Bundle\CycleBundle\Mapper\ProxyUtil::class)
         ->arg('$kernel', service('kernel'))
         ->call('preload');
     ;
