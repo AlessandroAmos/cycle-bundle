@@ -13,10 +13,12 @@ declare(strict_types=1);
 namespace Alms\Bundle\CycleBundle;
 
 use Alms\Bundle\CycleBundle\DependencyInjection\Compiler\OrmCompilerPass;
+use Alms\Bundle\CycleBundle\Mapper\ProxyUtil;
 use Alms\Bundle\CycleBundle\Security\CycleUserProviderFactory;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class CycleBundle extends Bundle
 {
@@ -32,6 +34,15 @@ class CycleBundle extends Bundle
             $security = $container->getExtension('security');
             $security->addUserProviderFactory(new CycleUserProviderFactory());
         }
+    }
+
+    public function boot(): void
+    {
+        /** @var KernelInterface $kernel */
+        $kernel = $this->container->get('kernel');
+
+        $proxyUtil = new ProxyUtil($kernel);
+        $proxyUtil->preload();
     }
 
 }

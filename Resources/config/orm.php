@@ -178,19 +178,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->alias(SchemaToArrayConverter::class, 'cycle.schema.schema_to_array_converter');
 
-    $services->set('cycle.orm.mapper.proxy_util', \Alms\Bundle\CycleBundle\Mapper\ProxyUtil::class)
-        ->arg('$kernel', service('kernel'))
-        ->call('preload');
-    ;
-
     $services->set('cycle.behavior.container', Container::class)
         ->call('bindSingleton', [
             \Symfony\Component\HttpKernel\KernelInterface::class,
             service('kernel'),
-        ])->call('bindSingleton', [
-            \App\ProxyUtil::class,
-            service('cycle.orm.mapper.proxy_util'),
-        ]);
+        ])
+    ;
 
     $services->set('cycle.behavior.command_generator', EventDrivenCommandGenerator::class)
         ->arg('$schema', service('cycle.schema.schema'))
