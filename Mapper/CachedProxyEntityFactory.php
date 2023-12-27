@@ -166,7 +166,7 @@ class CachedProxyEntityFactory extends ProxyEntityFactory
         {
             throw new \RuntimeException(sprintf('The entity `%s` class is final and can\'t be extended.', $class));
         }
-        $className = "{$class} Cycle ORM Proxy";
+        $className = "{$class}CycleORMProxy";
         $this->classMap[$class] = $className;
 
         if (!class_exists($className, false))
@@ -193,12 +193,14 @@ class CachedProxyEntityFactory extends ProxyEntityFactory
                 }
                 PHP;
 
-            if (!$this->util->proxyExists($className))
+            $proxyFileName = str_replace('\\', '_', $className);
+
+            if (!$this->util->proxyExists($proxyFileName))
             {
-                $this->util->saveProxy($className, "<?php\n\n" . $classStr);
+                $this->util->saveProxy($proxyFileName, "<?php\n\n" . $classStr);
             }
 
-            $this->util->requireProxy($className);
+            $this->util->requireProxy($proxyFileName);
         }
 
         return $className;
