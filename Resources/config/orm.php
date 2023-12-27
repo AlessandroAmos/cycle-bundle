@@ -21,9 +21,13 @@ use Cycle\ORM\Entity\Behavior\EventDrivenCommandGenerator;
 use Cycle\ORM\EntityManager;
 use Cycle\ORM\EntityManagerInterface;
 use Cycle\ORM\Factory;
+use Cycle\ORM\Mapper\Mapper;
 use Cycle\ORM\ORM;
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Schema;
+use Cycle\ORM\SchemaInterface;
+use Cycle\ORM\Select\Repository;
+use Cycle\ORM\Select\Source;
 use Cycle\Schema\Compiler;
 use Cycle\Schema\Generator\GenerateModifiers;
 use Cycle\Schema\Generator\GenerateRelations;
@@ -109,11 +113,21 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set('cycle.schema.compiler', Compiler::class);
 
+    $services->set('cycle.schema.registry_defaults', \Cycle\Schema\Defaults::class)
+        ->arg('$defaults', [
+            SchemaInterface::MAPPER => \App\Entity\Mapper::class,
+            SchemaInterface::REPOSITORY => Repository::class,
+            SchemaInterface::SOURCE => Source::class,
+            SchemaInterface::SCOPE => null,
+            SchemaInterface::TYPECAST_HANDLER => null,
+        ]);
+
     $services->set('cycle.schema.registry_factory', RegistryFactory::class)
         ->arg('$dbal', service('cycle.dbal.database_manager'));
 
     $services->set('cycle.schema.registry', Registry::class)
-        ->arg('$dbal', service('cycle.dbal.database_manager'));
+        ->arg('$dbal', service('cycle.dbal.database_manager'))
+        ->arg('$defaults', service('cycle.schema.registry_defaults'));;
 
     $services->alias(Registry::class, 'cycle.schema.registry');
 
@@ -164,14 +178,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->alias(SchemaToArrayConverter::class, 'cycle.schema.schema_to_array_converter');
 
-    $services->set('cycle.behavior.container', Container::class);
+    $services->set('cycle.orm.mapper.proxy_util', \App\ProxyUtil::class)
+        ->arg('$kernel', service('kernel'))
+        ->call('preload');
+    ;
+
+    $services->set('cycle.behavior.container', Container::class)
+        ->call('bindSingleton', [
+            \Symfony\Component\HttpKernel\KernelInterface::class,
+            service('kernel'),
+        ])->call('bindSingleton', [
+            \App\ProxyUtil::class,
+            service('cycle.orm.mapper.proxy_util'),
+        ]);
 
     $services->set('cycle.behavior.command_generator', EventDrivenCommandGenerator::class)
         ->arg('$schema', service('cycle.schema.schema'))
         ->arg('$container', service('cycle.behavior.container'));
 
     $services->set('cycle.orm.orm_factory', Factory::class)
-        ->arg('$dbal', service('cycle.dbal.database_manager'));
+        ->arg('$dbal', service('cycle.dbal.database_manager'))
+        ->arg('$factory', service('cycle.behavior.container'));
 
     $services->set('cycle.orm.orm', ORM::class)
         ->arg('$factory', service('cycle.orm.orm_factory'))
